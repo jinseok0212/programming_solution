@@ -1,3 +1,5 @@
-| No     | Site | Title | Solution Link | Problem Link | Last Solve |
-|--------|------|-------|----------------|--------------|-------------|
-| 181952 | pgm | 문자열 출력하기 | [pgm_181952.c](pgm/pgm_181952.c) | [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/181952) | 2025-05-03 20:07 |
+| No | Site | Title | Solution Link | Problem Link | Last Solve |
+|----|------|-------|----------------|--------------|-------------|
+| No | Site | Title | Solution Link | Problem Link | Last Solve |
+|----|------|-------|----------------|--------------|-------------|
+| 28278 | boj | 스택 2 | [boj_28278.c](boj/boj_28278.c) | [문제 링크](https://www.acmicpc.net/problem/28278) | 2025-05-06 16:00 |
