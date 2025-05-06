@@ -3,11 +3,10 @@ import datetime
 import os
 import subprocess
 
-README_PATH = "../README.md"
+README_PATH = "README.md"
 
 HEADER = """| No | Site | Title | Solution Link | Problem Link | Last Solve |
 |----|------|-------|----------------|--------------|-------------|"""
-
 
 def load_readme():
     if not os.path.exists(README_PATH):
@@ -16,11 +15,9 @@ def load_readme():
     with open(README_PATH, "r") as f:
         return f.read().splitlines()
 
-
 def save_readme(lines):
     with open(README_PATH, "w") as f:
         f.write("\n".join(lines) + "\n")
-
 
 def generate_row(no, site, title, filename, link):
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -28,7 +25,6 @@ def generate_row(no, site, title, filename, link):
     solution_md = f"[{filename}]({file_path})"
     link_md = f"[문제 링크]({link})"
     return f"| {no} | {site} | {title} | {solution_md} | {link_md} | {now} |"
-
 
 def git_commit_and_push(commit_message):
     try:
@@ -39,6 +35,11 @@ def git_commit_and_push(commit_message):
     except subprocess.CalledProcessError:
         print("⚠️ Git command failed. Make sure you're in a Git repository and configured correctly.")
 
+def is_valid_row(line):
+    try:
+        return line.startswith("| ") and int(line.split("|")[1].strip())
+    except (IndexError, ValueError):
+        return False
 
 def main():
     parser = argparse.ArgumentParser()
@@ -61,8 +62,10 @@ def main():
         body.insert(0, HEADER)
     body.append(row)
 
-    # Sort by number descending (optional)
-    body = [body[0]] + sorted(body[1:], key=lambda x: int(x.split("|")[1].strip()), reverse=True)
+    # Sort only valid data rows (excluding header)
+    header = [line for line in body if not is_valid_row(line)]
+    rows = [line for line in body if is_valid_row(line)]
+    body = header + sorted(rows, key=lambda x: datetime.datetime.strptime(x.split("|")[-2].strip(), "%Y-%m-%d %H:%M"), reverse=True)
 
     save_readme(body)
     print(f"✅ {args.filename} added to README.md")
@@ -70,7 +73,6 @@ def main():
     # Automatically commit and push changes
     commit_msg = f"Add: {args.site.upper()} {args.title}"
     git_commit_and_push(commit_msg)
-
 
 if __name__ == "__main__":
     main()
